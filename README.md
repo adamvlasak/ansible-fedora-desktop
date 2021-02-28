@@ -1,6 +1,6 @@
 # ansible-fedora-desktop
 
-Sets up my desktops/laptops to run feora linux my way ;-)
+Sets up my desktops/laptops to run fedora linux my way ;-)
 
 ## Install
 
