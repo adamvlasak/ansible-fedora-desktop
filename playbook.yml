@@ -1,0 +1,170 @@
+---
+- hosts: localhost
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: install required packages
+      dnf:
+        name: "{{ packages }}"
+        state: present
+      when: packages is defined
+      tags:
+        - packages
+
+    - name: setup time
+      file:
+        state: link
+        force: yes
+        src: "/usr/share/zoneinfo/{{ timezone }}"
+        dest: /etc/localtime
+        owner: root
+        group: root
+        mode: 0644
+      tags:
+        - locale
+
+    - name: setup locale.conf
+      template:
+        src: locale.conf.j2
+        dest: /etc/locale.conf
+        owner: root
+        group: root
+        mode: 0644
+      tags:
+        - locale
+
+    - name: setup fontconfig
+      template:
+        src: fontconfig.j2
+        dest: /usr/share/fontconfig/conf.avail/99-final.conf
+        owner: root
+        group: root
+        mode: 0644
+      notify:
+        - run fc-cache
+      tags:
+        - fonts
+
+    - name: setup fontconfig symlinks
+      file:
+        state: link
+        force: yes
+        src: "/usr/share/fontconfig/conf.avail/{{ item }}"
+        dest: "/etc/fonts/conf.d/{{ item }}"
+        owner: root
+        group: root
+        mode: 0644
+      loop:
+        "{{ fontconfig_symlinks }}"
+      notify:
+        - run fc-cache
+      when: fontconfig_symlinks is defined
+      tags:
+        - fonts
+
+    - name: setup font and theme and perform few other tweaks on gnome shell
+      become: yes
+      become_user: "{{ user }}"
+      dconf:
+        key: "{{ item.key }}"
+        value: "{{ item.value }}"
+        state: present
+      loop:
+        "{{ gnome_dconf_settings }}"
+      when: gnome_dconf_settings is defined
+      tags:
+        - gnome
+        - fonts
+
+    - name: remove desktop icons
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        "{{ absent_desktop_icons }}"
+      when: absent_desktop_icons is defined
+      tags:
+        - gnome
+
+    - name: ensure critical services are running
+      systemd:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      loop:
+        "{{ critical_services }}"
+      when: critical_services is defined
+      tags:
+        - services
+
+    - name: setup environment variables
+      lineinfile:
+        line: "{{ item }}"
+        path: /etc/environment
+      loop:
+        "{{ environment_vars }}"
+      when: environment_vars is defined
+      tags:
+        - environment
+
+    - name: prepare vim plug directories
+      become: yes
+      become_user: "{{ user }}"
+      file:
+        path: "{{ item }}"
+        state: directory
+        recurse: yes
+      loop:
+        - /home/{{ user }}/.vim/autoload
+        - /home/{{ user }}/.vim/plugged
+      tags:
+        - vim
+
+    - name: install vim-plug
+      become: yes
+      become_user: "{{ user }}"
+      get_url:
+        url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        dest: "{{ item  }}"
+        owner: "{{ user }}"
+        group: "{{ user }}"
+      when: not ansible_check_mode
+      loop:
+        - /home/{{ user }}/.vim/autoload/plug.vim
+      tags:
+        - vim
+
+    - name: put plugins into plugged directory
+      become: yes
+      become_user: "{{ user }}"
+      git:
+        repo: "{{ item }}"
+        dest: "/home/{{ user }}/.vim/plugged/{{ item.split('/')[4] }}"
+        update: yes
+        force: yes
+        depth: 1
+      when: vim_plugins is defined and not ansible_check_mode
+      loop: "{{ vim_plugins }}"
+      tags:
+        - vim
+
+    - name: provision dotfiles
+      template:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+        mode: 0644
+      loop:
+        - { src: "vimrc.j2", dest: "/home/{{ user }}/.vimrc", owner: "{{ user }}", group: "{{ user }}" }
+        - { src: "gitconfig.j2", dest: "/home/{{ user }}/.gitconfig", owner: "{{ user }}", group: "{{ user }}" }
+        - { src: "bashrc.j2", dest: "/home/{{ user }}/.bashrc", owner: "{{ user }}", group: "{{ user }}" }
+        - { src: "bash_profile.j2", dest: "/home/{{ user }}/.bash_profile", owner: "{{ user }}", group: "{{ user }}" }
+      tags:
+        - vim
+        - bash
+        - git
+
+  handlers:
+    - name: run fc-cache
+      command: fc-cache -r
