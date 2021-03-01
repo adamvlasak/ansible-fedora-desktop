@@ -11,7 +11,7 @@ laptop: no
 sans_font: "Fira Sans"
 serif_font: "Bookerly"
 monospace_font: "Fira Code"
-font_size: 10
+font_size: 11
 dpi: 96
 
 fontconfig_symlinks:
