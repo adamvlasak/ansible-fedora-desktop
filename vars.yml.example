@@ -21,7 +21,7 @@ fontconfig_symlinks:
   - 99-final.conf
 
 # theme settings
-gtk_theme: "Arc-Dark"
+gtk_theme: "Adwaita-dark"
 icon_theme: "Papirus-Dark"
 
 vim_plugins:
@@ -92,9 +92,9 @@ packages:
   - htop
   - iftop
   - iotop
+  - irqbalance
   - nautilus
   - tig
-  - tilix
   - tmux
   - xdg-user-dirs
   - youtube-dl
