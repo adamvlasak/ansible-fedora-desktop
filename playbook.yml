@@ -125,6 +125,16 @@
       tags:
         - environment
 
+    - name: set sysctl values
+      sysctl:
+        key: "{{ item.key }}"
+        value: "{{ item.value }}"
+      loop: "{{ sysctl_values }}"
+      when: sysctl_values is defined
+      tags:
+        - sysctl
+
+
     - name: prepare vim plug directories
       become: yes
       become_user: "{{ user }}"
