@@ -11,6 +11,14 @@
       tags:
         - packages
 
+    - name: remove packages
+      dnf:
+        name: "{{ absent_packages }}"
+        state: absent
+      when: absent_packages is defined
+      tags:
+        - packages
+
     - name: setup time
       file:
         state: link
@@ -115,6 +123,16 @@
       tags:
         - services
 
+    - name: mask unwanted user services
+      systemd:
+        name: "{{item}}"
+        scope: user
+        masked: yes
+        state: stopped
+      loop: "{{ masked_user_services }}"
+      tags:
+        - user_services
+
     - name: setup environment variables
       lineinfile:
         line: "{{ item }}"
@@ -133,7 +151,6 @@
       when: sysctl_values is defined
       tags:
         - sysctl
-
 
     - name: prepare vim plug directories
       become: yes
