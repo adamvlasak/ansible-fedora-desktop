@@ -4,13 +4,14 @@ fullname: "Foo Bar"
 email: foo@bar.baz
 hostname: bar
 timezone: "Europe/Prague"
+nameserver: 192.168.1.1
 
 laptop: no
 
 # font settings
 sans_font: "Fira Sans"
 serif_font: "Bookerly"
-monospace_font: "Fira Code"
+monospace_font: "Fira Mono"
 font_size: 11
 dpi: 96
 
@@ -37,6 +38,7 @@ environment_vars:
   - "HISTSIZE=10000"
   - "HISTFILESIZE=10000"
   - "HISTCONTROL=ignorespace:erasedups"
+  - "MOZ_ENABLE_WAYLAND=1"
 
 gnome_dconf_settings:
   - { key: '/org/gnome/desktop/interface/clock-show-seconds', value: "true" }
@@ -61,6 +63,11 @@ gnome_dconf_settings:
   - { key: '/org/gnome/settings-daemon/plugins/xsettings/rgba-order', value: "'rgb'" }
   - { key: '/org/gnome/shell/disable-user-extensions', value: "true" }
 
+sysctl_values:
+  - { key: "net.ipv6.conf.all.disable_ipv6", value: "1" }
+  - { key: "net.ipv6.conf.default.disable_ipv6", value: "1" }
+  - { key: "net.ipv6.conf.lo.disable_ipv6", value: "1" }
+
 critical_services:
   - gdm
   - irqbalance
@@ -75,7 +82,10 @@ masked_user_services:
   - gnome-user-share-webdav.service
   - rygel.service
   - gnome-remote-desktop.service
-  - vino-server.service
+  - evolution-addressbook-factory.service
+  - evolution-calendar-factory.service
+  - evolution-source-registry.service
+  - gvfs-goa-volume-monitor.service
 
 packages:
   - ansible
@@ -91,8 +101,29 @@ packages:
   - iftop
   - iotop
   - irqbalance
+  - libva
+  - intel-media-driver
+  - libva-utils
+  - mozilla-fira-mono-fonts
+  - mozilla-fira-sans-fonts
   - nautilus
+  - papirus-icon-theme
   - tig
   - tmux
   - xdg-user-dirs
   - youtube-dl
+
+absent_packages:
+  - cheese
+  - gnome-boxes
+  - gnome-calendar
+  - gnome-contacts
+  - gnome-maps
+  - gnome-photos
+  - gnome-software
+  - gnome-videos
+  - gnome-weather
+  - mediawriter
+  - rhytmbox
+  - simple-scan
+  - totem
