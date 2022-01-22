@@ -68,7 +68,7 @@ sysctl_values:
   - { key: "net.ipv6.conf.default.disable_ipv6", value: "1" }
   - { key: "net.ipv6.conf.lo.disable_ipv6", value: "1" }
 
-critical_services:
+critical_system_services:
   - gdm
   - irqbalance
   - systemd-timesyncd
@@ -76,7 +76,9 @@ critical_services:
 masked_system_services:
   - avahi-daemon.service
   - avahi-daemon.socket
-  - avahi-dnsconfd.service
+
+critical_user_services:
+  - wireplumber
 
 masked_user_services:
   - gnome-user-share-webdav.service
@@ -114,6 +116,11 @@ packages:
   - youtube-dl
 
 absent_packages:
+  - PackageKit
+  - PackageKit-command-not-found
+  - PackageKit-glib
+  - PackageKit-gstreamer-plugin
+  - PackageKit-gtk3-module
   - cheese
   - gnome-boxes
   - gnome-calendar

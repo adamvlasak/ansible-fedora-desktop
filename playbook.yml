@@ -118,10 +118,32 @@
         state: started
         enabled: yes
       loop:
-        "{{ critical_services }}"
-      when: critical_services is defined
+        "{{ critical_system_services }}"
+      when: critical_system_services is defined
       tags:
         - services
+
+    - name: mask unwanted system services
+      systemd:
+        name: "{{ item }}"
+        state: stopped
+        masked: yes
+      loop:
+        "{{ masked_system_services }}"
+      when: masked_system_services is defined
+      tags:
+        - services
+
+    - name: ensure critical user services are running
+      systemd:
+        name: "{{ item }}"
+        scope: user
+        enabled: yes
+        state: started
+      loop: "{{ critical_user_services }}"
+      when: critical_user_services is defined
+      tags:
+        - user_services
 
     - name: mask unwanted user services
       systemd:
@@ -130,6 +152,7 @@
         masked: yes
         state: stopped
       loop: "{{ masked_user_services }}"
+      when: masked_user_services is defined
       tags:
         - user_services
 
