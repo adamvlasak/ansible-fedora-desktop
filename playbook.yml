@@ -62,7 +62,7 @@
     - name: setup fontconfig
       template:
         src: fontconfig.j2
-        dest: /usr/share/fontconfig/conf.avail/99-final.conf
+        dest: /etc/fonts/local.conf
         owner: root
         group: root
         mode: 0644

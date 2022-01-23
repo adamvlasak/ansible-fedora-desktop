@@ -17,9 +17,7 @@ dpi: 96
 
 fontconfig_symlinks:
   - 10-hinting-slight.conf
-  - 10-sub-pixel-rgb.conf
   - 11-lcdfilter-default.conf
-  - 99-final.conf
 
 # theme settings
 gtk_theme: "Adwaita-dark"

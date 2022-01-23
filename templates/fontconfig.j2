@@ -1,13 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
     <fontconfig>
-{% if dpi is defined and dpi != "auto" %}
-    <match target="pattern">
-        <edit name="dpi" mode="assign">
-            <double>{{ dpi }}</double>
-        </edit>
-    </match>
-{% endif %}
 
     <!--
         Accept deprecated 'mono' alias, replacing it with 'monospace'
@@ -15,35 +8,6 @@
     <match target="pattern">
         <test qual="any" name="family"><string>mono</string></test>
         <edit name="family" mode="assign"><string>monospace</string></edit>
-    </match>
-
-    <!--
-        Names not including any well known alias are given 'sans-serif'
-    -->
-    <match target="pattern">
-        <test qual="all" name="family" compare="not_eq"><string>sans-serif</string></test>
-        <test qual="all" name="family" compare="not_eq"><string>serif</string></test>
-        <test qual="all" name="family" compare="not_eq"><string>monospace</string></test>
-        <edit name="family" mode="append_last"><string>sans-serif</string></edit>
-    </match>
-
-    <!-- hack: replace gnome-shell font Cantarell to match interface font -->
-    <match target="pattern">
-        <test qual="any" name="family"><string>Cantarell</string></test>
-        <edit name="family" mode="assign"><string>{{ sans_font }}</string></edit>
-    </match>
-
-    <match target="pattern">
-        <test qual="any" name="family"><string>Monaco</string></test>
-        <edit name="family" mode="assign"><string>{{ monospace_font }}</string></edit>
-    </match>
-    <match target="pattern">
-        <test qual="any" name="family"><string>Courier New</string></test>
-        <edit name="family" mode="assign"><string>{{ monospace_font }}</string></edit>
-    </match>
-    <match target="pattern">
-        <test qual="any" name="family"><string>Consolas</string></test>
-        <edit name="family" mode="assign"><string>{{ monospace_font }}</string></edit>
     </match>
 
     <!--
@@ -60,15 +24,11 @@
         <prefer><family>{{ sans_font }}</family></prefer>
     </alias>
     <alias>
+        <family>sans</family>
+        <prefer><family>{{ sans_font }}</family></prefer>
+    </alias>
+    <alias>
         <family>monospace</family>
         <prefer><family>{{ monospace_font }}</family></prefer>
-    </alias>
-    <alias>
-        <family>cursive</family>
-        <prefer><family>{{ sans_font }}</family></prefer>
-    </alias>
-    <alias>
-        <family>fantasy</family>
-        <prefer><family>{{ sans_font }}</family></prefer>
     </alias>
 </fontconfig>
