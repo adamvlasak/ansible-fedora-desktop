@@ -31,4 +31,13 @@
         <family>monospace</family>
         <prefer><family>{{ monospace_font }}</family></prefer>
     </alias>
+
+{% if font_replacements is defined %}
+{% for font in font_replacements %}
+    <match target="pattern">
+        <test qual="any" name="family"><string>{{ font.src }}</string></test>
+        <edit name="family" mode="assign" binding="same"><string>{{ font.dest }}</string></edit>
+    </match>
+{% endfor %}
+{% endif %}
 </fontconfig>

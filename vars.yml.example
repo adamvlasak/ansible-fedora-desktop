@@ -19,6 +19,11 @@ fontconfig_symlinks:
   - 10-hinting-slight.conf
   - 11-lcdfilter-default.conf
 
+font_replacements:
+  - { src: "Helvetica", dest: "{{ sans_font }}" }
+  - { src: "Arial", dest: "{{ sans_font }}" }
+  - { src: "Courier New", dest: "{{ monospace_font }}" }
+
 # theme settings
 gtk_theme: "Adwaita-dark"
 icon_theme: "Papirus-Dark"
