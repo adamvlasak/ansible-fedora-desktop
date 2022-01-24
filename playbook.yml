@@ -41,6 +41,28 @@
       tags:
         - locale
 
+    - name: setup NetworkManager
+      template:
+        src: NetworkManager.conf.j2
+        dest: /etc/NetworkManager/NetworkManager.conf
+        owner: root
+        group: root
+        mode: 0644
+      notify: restart nm
+      tags:
+        - network
+
+    - name: setup /etc/hosts
+      template:
+        src: hosts.j2
+        dest: /etc/hosts
+        owner: root
+        group: root
+        mode: 0644
+      notify: restart nm
+      tags:
+        - network
+
     - name: setup resolv.conf
       template:
         src: resolv.conf.j2
@@ -48,9 +70,9 @@
         owner: root
         group: root
         mode: 0644
-        attr: +i
+      notify: restart nm
       tags:
-        - dns
+        - network
 
     - name: setup fontconfig
       template:
@@ -227,3 +249,8 @@
   handlers:
     - name: run fc-cache
       command: fc-cache -r
+
+    - name: restart nm
+      service:
+        name: NetworkManager
+        state: restarted
