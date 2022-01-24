@@ -41,13 +41,6 @@
       tags:
         - locale
 
-    - name: remove resolv.conf symlink
-      file:
-        path: /etc/resolv.conf
-        state: absent
-      tags:
-        - dns
-
     - name: setup resolv.conf
       template:
         src: resolv.conf.j2
