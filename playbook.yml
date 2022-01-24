@@ -41,6 +41,14 @@
       tags:
         - locale
 
+    - name: setup hostname
+      hostname:
+        name: "{{ hostname }}"
+        use: systemd
+      notify: restart nm
+      tags:
+        - network
+
     - name: setup NetworkManager
       template:
         src: NetworkManager.conf.j2
