@@ -80,8 +80,7 @@
         owner: root
         group: root
         mode: 0644
-      loop:
-        "{{ fontconfig_symlinks }}"
+      loop: "{{ fontconfig_symlinks }}"
       notify:
         - run fc-cache
       when: fontconfig_symlinks is defined
@@ -95,8 +94,7 @@
         key: "{{ item.key }}"
         value: "{{ item.value }}"
         state: present
-      loop:
-        "{{ gnome_dconf_settings }}"
+      loop: "{{ gnome_dconf_settings }}"
       when: gnome_dconf_settings is defined
       tags:
         - gnome
@@ -106,19 +104,17 @@
       file:
         path: "{{ item }}"
         state: absent
-      loop:
-        "{{ absent_desktop_icons }}"
+      loop: "{{ absent_desktop_icons }}"
       when: absent_desktop_icons is defined
       tags:
         - gnome
 
-    - name: ensure critical services are running
+    - name: ensure critical system services are running
       systemd:
         name: "{{ item }}"
         state: started
         enabled: yes
-      loop:
-        "{{ critical_system_services }}"
+      loop: "{{ critical_system_services }}"
       when: critical_system_services is defined
       tags:
         - services
@@ -128,13 +124,14 @@
         name: "{{ item }}"
         state: stopped
         masked: yes
-      loop:
-        "{{ masked_system_services }}"
+      loop: "{{ masked_system_services }}"
       when: masked_system_services is defined
       tags:
         - services
 
     - name: ensure critical user services are running
+      become: yes
+      become_user: "{{ user }}"
       systemd:
         name: "{{ item }}"
         scope: user
@@ -146,6 +143,8 @@
         - user_services
 
     - name: mask unwanted user services
+      become: yes
+      become_user: "{{ user }}"
       systemd:
         name: "{{item}}"
         scope: user
@@ -160,8 +159,7 @@
       lineinfile:
         line: "{{ item }}"
         path: /etc/environment
-      loop:
-        "{{ environment_vars }}"
+      loop: "{{ environment_vars }}"
       when: environment_vars is defined
       tags:
         - environment
