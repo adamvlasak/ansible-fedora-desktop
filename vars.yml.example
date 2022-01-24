@@ -66,6 +66,9 @@ gnome_dconf_settings:
   - { key: '/org/gnome/settings-daemon/plugins/xsettings/rgba-order', value: "'rgb'" }
   - { key: '/org/gnome/shell/disable-user-extensions', value: "true" }
 
+absent_desktop_icons:
+  - htop.desktop
+
 sysctl_values:
   - { key: "net.ipv6.conf.all.disable_ipv6", value: "1" }
   - { key: "net.ipv6.conf.default.disable_ipv6", value: "1" }
