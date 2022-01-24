@@ -230,7 +230,7 @@
         - { src: "bash_profile.j2", dest: "/home/{{ user }}/.bash_profile", owner: "{{ user }}", group: "{{ user }}" }
       tags:
         - vim
-        - bash
+        - dotfiles
         - git
 
   handlers:
