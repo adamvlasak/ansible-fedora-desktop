@@ -169,7 +169,7 @@
       become: yes
       become_user: "{{ user }}"
       systemd:
-        name: "{{item}}"
+        name: "{{ item }}"
         scope: user
         masked: yes
         state: stopped
