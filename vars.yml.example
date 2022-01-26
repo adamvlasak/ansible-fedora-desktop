@@ -98,6 +98,9 @@ masked_user_services:
 packages:
   - ansible
   - bash-completion
+  - cargo
+  - cmus
+  - dotnet-sdk-6.0
   - eog
   - evince
   - firefox
@@ -105,17 +108,20 @@ packages:
   - git
   - glances
   - go
+  - gstreamer1-plugin-openh264
   - htop
   - iftop
+  - intel-media-driver
   - iotop
   - irqbalance
+  - lato-fonts
   - libva
-  - intel-media-driver
   - libva-utils
   - mozilla-fira-mono-fonts
   - mozilla-fira-sans-fonts
   - nautilus
   - papirus-icon-theme
+  - rust
   - tig
   - tmux
   - xdg-user-dirs
