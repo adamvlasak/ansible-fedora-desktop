@@ -41,7 +41,6 @@ environment_vars:
   - "HISTSIZE=10000"
   - "HISTFILESIZE=10000"
   - "HISTCONTROL=ignorespace:erasedups"
-  - "MOZ_ENABLE_WAYLAND=1"
 
 gnome_dconf_settings:
   - { key: '/org/gnome/desktop/interface/clock-show-seconds', value: "true" }
