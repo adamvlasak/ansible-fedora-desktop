@@ -4,7 +4,11 @@ fullname: "Foo Bar"
 email: foo@bar.baz
 hostname: bar
 timezone: "Europe/Prague"
-nameserver: 192.168.1.1
+
+network:
+  interface: wlo1
+  subnet: 192.168.1.0/24
+  nameserver: 192.168.1.1
 
 laptop: no
 
@@ -141,6 +145,7 @@ absent_packages:
   - gnome-software
   - gnome-videos
   - gnome-weather
+  - firewalld
   - mediawriter
   - rhytmbox
   - sane-backends

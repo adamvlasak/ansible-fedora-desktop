@@ -82,6 +82,30 @@
       tags:
         - network
 
+    - name: setup iptables rules
+      template:
+        src: iptables-rules.j2
+        dest: /usr/local/sbin/iptables-rules
+        owner: root
+        group: root
+        mode: 0700
+      notify: restart iptables
+      tags:
+        - network
+        - firewall
+
+    - name: setup iptables service
+      template:
+        src: iptables.service.j2
+        dest: /etc/systemd/system/iptables.service
+        owner: root
+        group: root
+        mode: 0644
+      notify: restart iptables
+      tags:
+        - network
+        - firewall
+
     - name: setup fontconfig
       template:
         src: fontconfig.j2
@@ -259,6 +283,11 @@
       command: fc-cache -r
 
     - name: restart nm
-      service:
+      systemd:
         name: NetworkManager
+        state: restarted
+
+    - name: restart iptables
+      systemd:
+        name: iptables
         state: restarted
