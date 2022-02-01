@@ -50,6 +50,7 @@ iptables -A INPUT -s {{ network.subnet }} -p icmp --icmp-type 0 -m conntrack --c
 
 # Allowed input packets
 iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -i {{ network.interface }} -s {{ network.subnet }} -m udp -p udp --dport 15600 -j DROP
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A INPUT -j LOG --log-prefix "INPUT DROP: "
 iptables -A INPUT -f -j DROP
