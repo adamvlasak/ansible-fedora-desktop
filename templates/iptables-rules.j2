@@ -41,12 +41,12 @@ iptables -t mangle -A PREROUTING -s 240.0.0.0/5 -j DROP
 iptables -t mangle -A PREROUTING -s 127.0.0.0/8 ! -i lo -j DROP
 
 # Incoming icmp
-iptables -A INPUT -s {{ network.subnet }} -p icmp --icmp-type 8 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
-iptables -A OUTPUT -d {{ network.subnet }} -p icmp --icmp-type 0 -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -s {{ network.subnet }} -p icmp --icmp-type 8 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -d {{ network.subnet }} -p icmp --icmp-type 0 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
 # Outgoing icmp
-iptables -A OUTPUT -d {{ network.subnet }} -p icmp --icmp-type 8 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
-iptables -A INPUT -s {{ network.subnet }} -p icmp --icmp-type 0 -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -d {{ network.subnet }} -p icmp --icmp-type 8 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -s {{ network.subnet }} -p icmp --icmp-type 0 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
 # Allowed input packets
 iptables -A INPUT -i lo -j ACCEPT
