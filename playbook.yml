@@ -49,6 +49,27 @@
       tags:
         - network
 
+    - name: create /etc/systemd/system-preset directory
+      file:
+        path: /etc/systemd/system-preset
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+      tags:
+        - services
+
+    - name: opt out of systemd-resolved use
+      copy:
+        dest: /etc/systemd/system-preset/20-systemd-resolved-disable.preset
+        content: "disable systemd-resolved.service"
+        owner: root
+        group: root
+        mode: 0644
+      notify: daemon-reload
+      tags:
+        - services
+
     - name: setup NetworkManager
       template:
         src: NetworkManager.conf.j2
@@ -101,7 +122,9 @@
         owner: root
         group: root
         mode: 0644
-      notify: restart iptables
+      notify:
+        - daemon-reload
+        - restart iptables
       tags:
         - network
         - firewall
@@ -281,6 +304,10 @@
   handlers:
     - name: run fc-cache
       command: fc-cache -r
+
+    - name: daemon-reload
+      systemd:
+        daemon-reload: yes
 
     - name: restart nm
       systemd:
