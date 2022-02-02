@@ -67,8 +67,7 @@ iptables -A OUTPUT -o {{ network.interface }} -m conntrack --ctstate NEW -m udp 
 iptables -A OUTPUT -o {{ network.interface }} -m conntrack --ctstate NEW -m udp -p udp --dport 123 -j ACCEPT
 iptables -A OUTPUT -o {{ network.interface }} -d {{ network.nameserver }} -m conntrack --ctstate NEW -m tcp -p tcp --dport 445 -j ACCEPT
 iptables -A OUTPUT -o {{ network.interface }} -d {{ network.nameserver }} -m conntrack --ctstate NEW -m udp -p udp --dport 53 -j ACCEPT
-iptables -A OUTPUT -o {{ network.interface }} -d {{ network.subnet }} -m conntrack --ctstate NEW -m udp -p udp --sport 1900 -j ACCEPT
-iptables -A OUTPUT -o {{ network.interface }} -m conntrack --ctstate NEW -m udp -p udp --sport 68 --dport 67 -j ACCEPT
+iptables -A OUTPUT -o {{ network.interface }} -d {{ network.gateway }} -m conntrack --ctstate NEW -m udp -p udp --sport 68 --dport 67 -j ACCEPT
 iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -j LOG --log-prefix "OUTPUT DROP: "
 iptables -A OUTPUT -m tcp -p tcp -j REJECT --reject-with tcp-reset
