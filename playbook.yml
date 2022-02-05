@@ -210,6 +210,15 @@
       tags:
         - user_services
 
+    - name: k8s
+      block:
+        - name: install minikube
+          dnf:
+            name: https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
+            state: present
+      tags:
+        - k8s
+
     - name: vim
       block:
         - name: prepare vim plug directories
