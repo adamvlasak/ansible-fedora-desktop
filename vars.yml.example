@@ -79,6 +79,7 @@ critical_system_services:
   - gdm
   - iptables
   - irqbalance
+  - podman
 
 masked_system_services:
   - avahi-daemon.service
@@ -99,7 +100,6 @@ masked_user_services:
 packages:
   - ansible
   - bash-completion
-  - cargo
   - cmus
   - dotnet-sdk-6.0
   - eog
@@ -122,7 +122,7 @@ packages:
   - mozilla-fira-sans-fonts
   - nautilus
   - papirus-icon-theme
-  - rust
+  - podman
   - tig
   - tmux
   - xdg-user-dirs
