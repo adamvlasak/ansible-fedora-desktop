@@ -122,30 +122,6 @@
       tags:
         - network
 
-    - name: firewall
-      block:
-        - name: setup iptables rules
-          template:
-            src: iptables-rules.j2
-            dest: /usr/local/sbin/iptables-rules
-            owner: root
-            group: root
-            mode: 0700
-          notify: restart iptables
-
-        - name: setup iptables service
-          template:
-            src: iptables.service.j2
-            dest: /etc/systemd/system/iptables.service
-            owner: root
-            group: root
-            mode: 0644
-          notify:
-            - daemon-reload
-            - restart iptables
-      tags:
-        - firewall
-
     - name: fonts
       block:
         - name: setup fontconfig
@@ -352,9 +328,4 @@
     - name: restart nm
       systemd:
         name: NetworkManager
-        state: restarted
-
-    - name: restart iptables
-      systemd:
-        name: iptables
         state: restarted

@@ -74,7 +74,7 @@ sysctl_values:
 
 critical_system_services:
   - docker
-  - iptables
+  - firewalld
   - irqbalance
 
 masked_system_services:
@@ -125,7 +125,6 @@ packages:
 
 absent_packages:
   - cheese
-  - firewalld
   - gnome-boxes
   - gnome-calendar
   - gnome-contacts
