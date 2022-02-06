@@ -95,6 +95,7 @@ masked_user_services:
 
 packages:
   - cmus
+  - code
   - dotnet-sdk-6.0
   - eog
   - evince

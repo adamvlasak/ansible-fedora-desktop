@@ -3,6 +3,31 @@
   vars_files:
     - vars.yml
   tasks:
+    - name: additional repos
+      block:
+        - name: Enable the RPM Fusion repository
+          dnf:
+            name: "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ansible_distribution_major_version}}.noarch.rpm"
+            state: present
+
+        - name: Enable the RPM Fusion repository (nonfree)
+          dnf:
+            name: "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ansible_distribution_major_version}}.noarch.rpm"
+            state: present
+
+        - name: import gpg key for vscode repo
+          command: rpm --import https://packages.microsoft.com/keys/microsoft.asc
+
+        - name: setup vscode repo
+          copy:
+            dest: /etc/yum.repos.d/vscode.repo
+            content: "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc"
+            owner: root
+            group: root
+            mode: 0644
+      tags:
+        - repos
+
     - name: packages
       block:
         - name: install required packages
@@ -257,26 +282,6 @@
       become_user: "{{ user }}"
       tags:
         - user_services
-
-    - name: vscode
-      block:
-        - name: import gpg key for vscode repo
-          command: rpm --import https://packages.microsoft.com/keys/microsoft.asc
-
-        - name: setup vscode repo
-          copy:
-            dest: /etc/yum.repos.d/vscode.repo
-            content: "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc"
-            owner: root
-            group: root
-            mode: 0644
-
-        - name: install vscode package
-          dnf:
-            name: code
-            state: present
-      tags:
-        - vscode
 
     - name: vim
       block:
