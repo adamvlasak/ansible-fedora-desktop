@@ -17,6 +17,8 @@
 
         - name: import gpg key for vscode repo
           command: rpm --import https://packages.microsoft.com/keys/microsoft.asc
+          args:
+            creates: /usr/share/distribution-gpg-keys/microsoft/microsoft.gpg
 
         - name: setup vscode repo
           copy:
