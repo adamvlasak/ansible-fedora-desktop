@@ -30,6 +30,14 @@ font_replacements:
 gtk_theme: "Adwaita-dark"
 icon_theme: "Papirus-Dark"
 
+k8s:
+  kubectl:
+    version: 1.23.0
+  kind:
+    version: 0.11.1
+  helm:
+    version: 3.8.0
+
 vim_plugins:
   - https://github.com/vim-syntastic/syntastic.git
   - https://github.com/pearofducks/ansible-vim

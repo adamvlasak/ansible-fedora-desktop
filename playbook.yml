@@ -190,9 +190,47 @@
     - name: k8s
       block:
         - name: install minikube
-          dnf:
-            name: https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
-            state: present
+          get_url:
+            url: "https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64"
+            dest: /usr/local/bin/minikube
+            owner: root
+            group: root
+            mode: 0755
+
+        - name: install kubectl
+          get_url:
+            url: "https://dl.k8s.io/release/v{{ k8s.kubectl.version }}/bin/linux/amd64/kubectl"
+            dest: /usr/local/bin/kubectl
+            owner: root
+            group: root
+            mode: 0755
+
+        - name: install kind
+          get_url:
+            url: "https://kind.sigs.k8s.io/dl/v{{ k8s.kind.version }}/kind-linux-amd64"
+            dest: /usr/local/bin/kind
+            owner: root
+            group: root
+            mode: 0755
+
+        - name: download helm
+          unarchive:
+            src: "https://get.helm.sh/helm-v{{ k8s.helm.version }}-linux-amd64.tar.gz"
+            dest: /tmp
+            remote_src: yes
+
+        - name: copy helm binary into place
+          copy:
+            src: /tmp/linux-amd64/helm
+            dest: /usr/local/bin/helm
+            owner: root
+            group: root
+            mode: 0755
+
+        - name: cleanup /tmp from helm
+          file:
+            path: /tmp/linux-amd64
+            state: absent
       tags:
         - k8s
 
