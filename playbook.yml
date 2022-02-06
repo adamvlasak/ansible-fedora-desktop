@@ -166,6 +166,48 @@
       tags:
         - gnome
 
+    - name: set sysctl values
+      sysctl:
+        key: "{{ item.key }}"
+        value: "{{ item.value }}"
+      loop: "{{ sysctl_values }}"
+      when: sysctl_values is defined
+      tags:
+        - sysctl
+
+    - name: setup environment variables
+      lineinfile:
+        line: "{{ item }}"
+        path: /etc/environment
+      loop: "{{ environment_vars }}"
+      when: environment_vars is defined
+      tags:
+        - environment
+
+    - name: k8s
+      block:
+        - name: install minikube
+          dnf:
+            name: https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
+            state: present
+      tags:
+        - k8s
+
+    - name: docker
+      block:
+        - name: setup docker repository
+          command: dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+          args:
+            creates: /etc/yum.repos.d/docker-ce.repo
+
+        - name: install docker packages
+          dnf:
+            name: ["docker-ce", "docker-ce-cli", "containerd.io"]
+            state: present
+            update_cache: yes
+      tags:
+        - docker
+
     - name: system services
       block:
         - name: ensure critical system services are running
@@ -209,30 +251,6 @@
       become_user: "{{ user }}"
       tags:
         - user_services
-
-    - name: k8s
-      block:
-        - name: install minikube
-          dnf:
-            name: https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
-            state: present
-      tags:
-        - k8s
-
-    - name: docker
-      block:
-        - name: setup docker repository
-          command: dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
-          args:
-            creates: /etc/yum.repos.d/docker-ce.repo
-
-        - name: install docker packages
-          dnf:
-            name: ["docker-ce", "docker-ce-cli", "containerd.io"]
-            state: present
-            update_cache: yes
-      tags:
-        - docker
 
     - name: vim
       block:
@@ -289,24 +307,6 @@
         - { src: "zshrc.j2", dest: "/home/{{ user }}/.zshrc", owner: "{{ user }}", group: "{{ user }}" }
       tags:
         - dotfiles
-
-    - name: set sysctl values
-      sysctl:
-        key: "{{ item.key }}"
-        value: "{{ item.value }}"
-      loop: "{{ sysctl_values }}"
-      when: sysctl_values is defined
-      tags:
-        - sysctl
-
-    - name: setup environment variables
-      lineinfile:
-        line: "{{ item }}"
-        path: /etc/environment
-      loop: "{{ environment_vars }}"
-      when: environment_vars is defined
-      tags:
-        - environment
 
   handlers:
     - name: run fc-cache
