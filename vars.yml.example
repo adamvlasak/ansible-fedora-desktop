@@ -62,9 +62,6 @@ gnome_dconf_settings:
   - { key: '/org/gnome/desktop/wm/preferences/button-layout', value: "'appmenu:minimize,maximize,close'" }
   - { key: '/org/gnome/desktop/wm/preferences/titlebar-font', value: "'{{ sans_font }} {{ font_size }}'" }
   - { key: '/org/gnome/mutter/center-new-windows', value: "true" }
-  - { key: '/org/gnome/settings-daemon/plugins/xsettings/antialiasing', value: "'grayscale'" }
-  - { key: '/org/gnome/settings-daemon/plugins/xsettings/hinting', value: "'slight'" }
-  - { key: '/org/gnome/settings-daemon/plugins/xsettings/rgba-order', value: "'rgb'" }
   - { key: '/org/gnome/shell/disable-user-extensions', value: "true" }
 
 absent_desktop_icons:
@@ -97,12 +94,11 @@ masked_user_services:
   - gvfs-goa-volume-monitor.service
 
 packages:
-  - ansible
-  - bash-completion
   - cmus
   - dotnet-sdk-6.0
   - eog
   - evince
+  - ffmpeg
   - firefox
   - flatpak
   - git
@@ -123,8 +119,8 @@ packages:
   - papirus-icon-theme
   - tig
   - tmux
-  - xdg-user-dirs
   - youtube-dl
+  - zsh
 
 absent_packages:
   - cheese
@@ -137,13 +133,32 @@ absent_packages:
   - gnome-software
   - gnome-videos
   - gnome-weather
+  - libreoffice-calc
+  - libreoffice-core
+  - libreoffice-data
+  - libreoffice-emailmerge
+  - libreoffice-filters
+  - libreoffice-graphicfilter
+  - libreoffice-gtk3
+  - libreoffice-help-en
+  - libreoffice-impress
+  - libreoffice-langpack-en
+  - libreoffice-ogltrans
+  - libreoffice-opensymbol-fonts
+  - libreoffice-pdfimport
+  - libreoffice-pyuno
+  - libreoffice-ure
+  - libreoffice-ure-common
+  - libreoffice-writer
+  - libreoffice-x11
+  - libreoffice-xsltfilter
   - mediawriter
   - PackageKit
   - PackageKit-command-not-found
   - PackageKit-glib
   - PackageKit-gstreamer-plugin
   - PackageKit-gtk3-module
-  - rhytmbox
+  - rhythmbox
   - sane-backends
   - simple-scan
   - speech-dispatcher
