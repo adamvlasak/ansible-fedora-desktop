@@ -258,6 +258,26 @@
       tags:
         - user_services
 
+    - name: vscode
+      block:
+        - name: import gpg key for vscode repo
+          command: rpm --import https://packages.microsoft.com/keys/microsoft.asc
+
+        - name: setup vscode repo
+          copy:
+            dest: /etc/yum.repos.d/vscode.repo
+            content: "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc"
+            owner: root
+            group: root
+            mode: 0644
+
+        - name: install vscode package
+          dnf:
+            name: code
+            state: present
+      tags:
+        - vscode
+
     - name: vim
       block:
         - name: prepare vim plug directories
