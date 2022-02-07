@@ -127,6 +127,7 @@ packages:
   - nautilus
   - papirus-icon-theme
   - tig
+  - tilix
   - tmux
   - youtube-dl
   - zsh
