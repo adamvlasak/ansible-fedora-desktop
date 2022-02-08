@@ -7,13 +7,11 @@
       block:
         - name: Enable the RPM Fusion repository
           dnf:
-            name: "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ansible_distribution_major_version}}.noarch.rpm"
+            name: "{{ item }}"
             state: present
-
-        - name: Enable the RPM Fusion repository (nonfree)
-          dnf:
-            name: "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ansible_distribution_major_version}}.noarch.rpm"
-            state: present
+          loop:
+            - "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ansible_distribution_major_version}}.noarch.rpm"
+            - "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ansible_distribution_major_version}}.noarch.rpm"
 
         - name: import gpg key for vscode repo
           command: rpm --import https://packages.microsoft.com/keys/microsoft.asc
@@ -93,32 +91,18 @@
             mode: 0644
           notify: daemon-reload
 
-        - name: setup NetworkManager
+        - name: setup hosts, resolv.conf and NetworkManager
           template:
-            src: NetworkManager.conf.j2
-            dest: /etc/NetworkManager/NetworkManager.conf
+            src: "{{ item.src }}"
+            dest: "{{ item.dest }}"
             owner: root
             group: root
             mode: 0644
           notify: restart nm
-
-        - name: setup /etc/hosts
-          template:
-            src: hosts.j2
-            dest: /etc/hosts
-            owner: root
-            group: root
-            mode: 0644
-          notify: restart nm
-
-        - name: setup resolv.conf
-          template:
-            src: resolv.conf.j2
-            dest: /etc/resolv.conf
-            owner: root
-            group: root
-            mode: 0644
-          notify: restart nm
+          loop:
+            - { src: hosts.j2, dest: /etc/hosts }
+            - { src: resolv.conf.j2, dest: /etc/resolv.conf }
+            - { src: NetworkManager.conf.j2, dest: /etc/NetworkManager/NetworkManager.conf }
       tags:
         - network
 
@@ -189,29 +173,17 @@
 
     - name: k8s
       block:
-        - name: install minikube
+        - name: install minikube, kubectl and kind
           get_url:
-            url: "https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64"
-            dest: /usr/local/bin/minikube
+            url: "{{ item.url }}"
+            dest: "{{ item.dest }}"
             owner: root
             group: root
             mode: 0755
-
-        - name: install kubectl
-          get_url:
-            url: "https://dl.k8s.io/release/v{{ k8s.kubectl.version }}/bin/linux/amd64/kubectl"
-            dest: /usr/local/bin/kubectl
-            owner: root
-            group: root
-            mode: 0755
-
-        - name: install kind
-          get_url:
-            url: "https://kind.sigs.k8s.io/dl/v{{ k8s.kind.version }}/kind-linux-amd64"
-            dest: /usr/local/bin/kind
-            owner: root
-            group: root
-            mode: 0755
+          loop:
+            - { url: "https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64", dest: /usr/local/bin/minikube }
+            - { url: "https://dl.k8s.io/release/v{{ k8s.kubectl.version }}/bin/linux/amd64/kubectl", dest: /usr/local/bin/kubectl }
+            - { url: "https://kind.sigs.k8s.io/dl/v{{ k8s.kind.version }}/kind-linux-amd64", dest: /usr/local/bin/kind }
 
         - name: download helm
           unarchive:
