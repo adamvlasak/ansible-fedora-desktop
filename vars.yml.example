@@ -38,6 +38,10 @@ k8s:
   helm:
     version: 3.8.0
 
+docker:
+  compose:
+    version: 2.2.3
+
 vim_plugins:
   - https://github.com/vim-syntastic/syntastic.git
   - https://github.com/pearofducks/ansible-vim
