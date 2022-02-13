@@ -11,6 +11,12 @@ network:
   gateway: 192.168.1.1
   nameserver: 192.168.1.1
 
+zsh:
+  update_frequency: 1
+  plugins:
+    - git
+    - z
+
 # font settings
 sans_font: "Fira Sans"
 serif_font: "Bookerly"
