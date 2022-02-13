@@ -42,12 +42,14 @@ docker:
   compose:
     version: 2.2.3
 
-vim_plugins:
-  - https://github.com/vim-syntastic/syntastic.git
-  - https://github.com/pearofducks/ansible-vim
-  - https://github.com/vim-airline/vim-airline
-  - https://github.com/junegunn/fzf
-  - https://github.com/junegunn/fzf.vim
+vim
+  colorscheme: default
+  plugins:
+    - https://github.com/vim-syntastic/syntastic.git
+    - https://github.com/pearofducks/ansible-vim
+    - https://github.com/vim-airline/vim-airline
+    - https://github.com/junegunn/fzf
+    - https://github.com/junegunn/fzf.vim
 
 environment_vars:
   - "EDITOR=vim"
@@ -130,9 +132,11 @@ packages:
   - mozilla-fira-sans-fonts
   - nautilus
   - papirus-icon-theme
+  - sysstat
   - tig
   - tilix
   - tmux
+  - util-linux-user
   - youtube-dl
   - zsh
 

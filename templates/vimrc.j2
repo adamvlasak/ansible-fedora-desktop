@@ -1,5 +1,7 @@
+set nocompatible
+
 call plug#begin()
-{% for plugin in vim_plugins %}
+{% for plugin in vim.plugins %}
 Plug '{{ plugin.split('/')[3] }}/{{ plugin.split('/')[4] }}'
 {% endfor %}
 call plug#end()
@@ -29,17 +31,22 @@ let g:go_fmt_command = "goimports"
 
 map ; :Files<CR>
 
+colorscheme {{ vim.colorscheme }}
+
+syntax on
 filetype plugin indent on
-set backspace=2
-set expandtab
-set fileencodings=utf-8,latin2
-set nocompatible
+
+set number
 set noshowmode
 set nowrap
-set number
-set shiftwidth=2
-set tabstop=2
-syntax on
+set backspace=2
+set fileencodings=utf-8,latin2
+
+set ts=4 sw=4 expandtab smarttab
+
+autocmd FileType yaml setlocal ts=2 sw=2
+autocmd FileType yml setlocal ts=2 sw=2
+autocmd FileType make setlocal ts=2 sw=2 noexpandtab
 
 if &term == "xterm"
   set t_Co=256
