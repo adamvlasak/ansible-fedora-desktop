@@ -153,6 +153,17 @@
       tags:
         - gnome
 
+    - name: setup custom user desktop icons
+      template:
+        src: "{{ item }}.j2"
+        dest: "/home/{{ user }}/.local/share/applications/{{ item }}"
+      loop: "{{ custom_user_icons }}"
+      when: custom_user_icons is defined
+      become: yes
+      become_user: "{{ user }}"
+      tags:
+        - gnome
+
     - name: set sysctl values
       sysctl:
         key: "{{ item.key }}"
