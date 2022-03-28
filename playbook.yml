@@ -209,6 +209,7 @@
             owner: root
             group: root
             mode: 0755
+          when: not ansible_check_mode
 
         - name: cleanup /tmp from helm
           file:
